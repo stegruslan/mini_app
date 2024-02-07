@@ -1,0 +1,8 @@
+.idea
+.venv
+.vscode
+
+
+**/__pycashe__
+
+.env
