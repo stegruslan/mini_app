@@ -1,4 +1,3 @@
-
 from pathlib import Path
 
 from envparse import env
@@ -8,12 +7,9 @@ ENV_PATH = BASE_DIR / '.env'
 if ENV_PATH.is_file():
     env.read_envfile(ENV_PATH)
 
-
 SECRET_KEY = env.str('DJANGO_SECRET_KEY')
 DEBUG = env.bool('DEBUG')
 ALLOWED_HOSTS = []
-
-
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -60,7 +56,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'mini_app.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
@@ -70,7 +65,6 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -90,7 +84,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
@@ -101,7 +94,6 @@ TIME_ZONE = 'Europe/Moscow'
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
@@ -118,3 +110,7 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication'
     )
 }
+
+AUTHENTICATION_FIELDS = [
+    'username',
+]

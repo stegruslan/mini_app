@@ -1,8 +1,8 @@
 from django.urls import path
-
-from .views import SignUpView, CreateWorkspaceView
+from profiles.views import ProfileViewSet
 
 urlpatterns = [
-    path('signup/', SignUpView.as_view()),
-    path('profiles/create/', CreateWorkspaceView.as_view())
+    path('', ProfileViewSet.as_view({'get': 'list', 'post': 'create'}), name='profile-list'),
+    path('<int:pk>/', ProfileViewSet.as_view({'get': 'retrieve', 'put': 'update', 'delete': 'destroy'}),
+         name='profile-detail'),
 ]
