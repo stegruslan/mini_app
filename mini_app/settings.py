@@ -9,7 +9,7 @@ if ENV_PATH.is_file():
 
 SECRET_KEY = env.str('DJANGO_SECRET_KEY')
 DEBUG = env.bool('DEBUG')
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -110,7 +110,3 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication'
     )
 }
-
-AUTHENTICATION_FIELDS = [
-    'username',
-]

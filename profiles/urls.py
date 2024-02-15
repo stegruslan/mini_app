@@ -1,8 +1,10 @@
 from django.urls import path
-from profiles.views import ProfileViewSet
+from .views import UserCreateView, PostCreateView, PostListView, PostDeleteView, PostUpdateView
 
 urlpatterns = [
-    path('', ProfileViewSet.as_view({'get': 'list', 'post': 'create'}), name='profile-list'),
-    path('<int:pk>/', ProfileViewSet.as_view({'get': 'retrieve', 'put': 'update', 'delete': 'destroy'}),
-         name='profile-detail'),
+    path('register/', UserCreateView.as_view(), name='user-register'),
+    path('create-post/', PostCreateView.as_view(), name='post-create'),
+    path('posts/', PostListView.as_view(), name='post-list'),
+    path('posts/<int:pk>/', PostDeleteView.as_view(), name='post-delete'),
+    path('posts/<int:pk>/update/', PostUpdateView.as_view(), name='post-update'),
 ]

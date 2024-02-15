@@ -1,27 +1,50 @@
-from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
-from rest_framework.response import Response
-from rest_framework import viewsets
-from profiles.serializers import ProfileSerializer
-from profiles.models import Profile
+from rest_framework import generics
+from rest_framework.permissions import IsAuthenticated, AllowAny
+from profiles.models import User, Post
+from profiles.permissions import IsPostOwner
+from profiles.serializers import UserSerializer, PostSerializer
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 
 
-@login_required
-class CreateProfileViewSet(viewsets.ModelViewSet):
-    queryset = Profile.objects.all()
-    serializer_class = ProfileSerializer
-
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        return Response(serializer.data)
+class UserCreateView(generics.CreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [AllowAny]
 
 
-class ProfileViewSet(viewsets.ModelViewSet):
-    queryset = Profile.objects.all()
-    serializer_class = ProfileSerializer
+class PostCreateView(generics.CreateAPIView):
+    serializer_class = PostSerializer
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
 
-    def get_queryset(self):
-        user = self.request.user
-        return Profile.objects.filter(author=user)
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+
+class PostListView(generics.ListCreateAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+    permission_classes = [AllowAny]
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+
+class PostDeleteView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+    permission_classes = [IsAuthenticated, IsPostOwner]
+
+    def perform_destroy(self, instance):
+        instance.delete()
+
+
+class PostUpdateView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+    permission_classes = [IsAuthenticated, IsPostOwner]
+
+    def perform_update(self, serializer):
+        serializer.save(user=self.request.user)
