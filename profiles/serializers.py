@@ -15,11 +15,12 @@ class UserSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+def delete(instance):
+    instance.delete()
+    return instance
+
+
 class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = '__all__'
-
-    def delete(self, instance):
-        instance.delete()
-        return instance
